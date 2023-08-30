@@ -434,14 +434,19 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
   }
 
   if(length(age.lim) == 0) {
-    min.age <- min(set$ranges[,2])
-    max.age <- max(set$ranges[,3])
+    if(set$BCAD) {
+      min.age <- 1950-min(set$ranges[,2])
+      max.age <- 1950-max(set$ranges[,3])
+    } else{
+      min.age <- min(set$ranges[,2])
+      max.age <- max(set$ranges[,3])
+    }
     age.lim <- c(min.age, max.age)
   } else {
       min.age <- min(age.lim)
       max.age <- max(age.lim)
     }
-  if(set$BCAD) # was set$BCAD
+  if(set$BCAD) {# was set$BCAD
     age.lim <- 1950 - age.lim # work with cal BP internally
     min.age <- 1950 - min.age
     max.age <- 1950 - max.age
@@ -527,6 +532,5 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
       lines(median.rng, age.seq, col=median.col, lty=median.lty) else
        lines(age.seq, median.rng, col=median.col, lty=median.lty)
   
-  box(bty=bty)
   invisible(stored)
 }
