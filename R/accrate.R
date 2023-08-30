@@ -425,7 +425,7 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
 #'   flux.age.ghost(1)
 #' }
 #' @export
-flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr.res=age.res, set=get('info'), flux=c(), plot.range=TRUE, prob=.8, range.col=grey(0.5), range.lty=2, plot.mean=TRUE, mean.col="red", mean.lty=2, plot.median=TRUE, median.col="blue", median.lty=2, flux.lim=c(), flux.lab=expression("flux (g cm"^-1*" yr"^-1*")"), upper=.95, rgb.scale=c(0,0,0), rgb.res=100, dark=set$dark, cutoff=0.001, BCAD=set$BCAD, age.lab=c(), yr.lab=age.lab, rotate.axes=FALSE, rev.flux=FALSE, rev.age=FALSE, rev.yr=rev.age) {
+flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr.res=age.res, set=get('info'), flux=c(), plot.range=TRUE, prob=.8, range.col=grey(0.5), range.lty=2, plot.mean=TRUE, mean.col="red", mean.lty=2, plot.median=TRUE, median.col="blue", median.lty=2, flux.lim=c(), flux.lab=expression("flux (g cm"^-2*" yr"^-1*")"), upper=.95, rgb.scale=c(0,0,0), rgb.res=100, dark=set$dark, cutoff=0.001, BCAD=set$BCAD, age.lab=c(), yr.lab=age.lab, rotate.axes=FALSE, rev.flux=FALSE, rev.age=FALSE, rev.yr=rev.age) {
   if(length(flux) == 0) { # then read a .csv file, expecting data in columns with headers
     flux <- read.csv(paste0(set$coredir, set$core, "/", set$core, "_flux.csv"))
     flux <- cbind(flux[,1], flux[,1+proxy])
@@ -443,14 +443,13 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
     }
     age.lim <- c(min.age, max.age)
   } else {
+    if(BCAD) {
+      age.lim <- 1950 - age.lim # work with cal BP internally
+    }
       min.age <- min(age.lim)
       max.age <- max(age.lim)
     }
-  if(set$BCAD) {# was set$BCAD
-    age.lim <- 1950 - age.lim # work with cal BP internally
-    min.age <- 1950 - min.age
-    max.age <- 1950 - max.age
-  }
+
   age.seq <- seq(min(min.age, max.age), max(min.age, max.age), length=age.res)
   fluxes <- array(NA, dim=c(nrow(set$output), length(age.seq)))
   for(i in 1:nrow(set$output)) {
