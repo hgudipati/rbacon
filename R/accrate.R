@@ -450,7 +450,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
     age.lim <- 1950 - age.lim # work with cal BP internally
     min.age <- 1950 - min.age
     max.age <- 1950 - max.age
-    
+  }
   age.seq <- seq(min(min.age, max.age), max(min.age, max.age), length=age.res)
   fluxes <- array(NA, dim=c(nrow(set$output), length(age.seq)))
   for(i in 1:nrow(set$output)) {
