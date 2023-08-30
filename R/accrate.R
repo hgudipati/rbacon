@@ -480,7 +480,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
   if(rotate.axes)
     plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=flux.lim, xlab=flux.lab, yaxt="n") else
       plot(0, type="n", xlim=age.lim, xlab=age.lab, ylim=flux.lim, ylab=flux.lab, xaxt="n")
-  if(BCAD && !set$BCAD) {
+  if(BCAD) {
     if(rotate.axes)
       axis(2, pretty(age.lim), labels=1950-pretty(age.lim)) else
         axis(1, pretty(age.lim), labels=1950-pretty(age.lim))
@@ -510,6 +510,8 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
   }
   #store values for output
   message("\n")
+  if(BCAD) 
+    age.seq <-age.seq+1950
   stored <- cbind(age.seq, min.rng, max.rng, median.rng, mean.rng)
   colnames(stored) <- c("ages", "min.rng", "max.rng", "median", "mean")
   
