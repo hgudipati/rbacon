@@ -453,18 +453,28 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
     }
 
   age.seq <- seq(min(min.age, max.age), max(min.age, max.age), length=age.res)
+  fluxes.d <- array(NA, dim=c(nrow(flux), nrow(set$output)))
+  #ages_flux.d <- array(NA, dim=c(nrow(flux), nrow(set$output)))
   fluxes <- array(NA, dim=c(nrow(set$output), length(age.seq)))
-  for(i in 1:nrow(set$output)) {
-    #setTxtProgressBar(pb, i)
-    ages <- as.numeric(set$output[i,1:(ncol(set$output)-1)]) # 1st step to calculate ages for each set$elbows
-    ages <- c(ages[1], ages[1]+set$thick * cumsum(ages[2:length(ages)])) # now calculate the ages for each set$elbows
-    ages.d <- approx(ages, c(set$elbows, max(set$elbows)+set$thick), age.seq, rule=1)$y # find the depth belonging to each age.seq, NA if none
-    ages.i <- floor(approx(ages, (length(set$elbows):0)+1, age.seq, rule=2)$y) # find the column belonging to each age.seq
-    flux.d <- approx(flux[,1], flux[,2], ages.d, rule=1)$y # interpolate flux (in depth) to depths belonging to each age.seq
-    fluxes[i,] <- flux.d / as.numeric(set$output[i,(1+ages.i)]) # (amount / cm^3) / (yr/cm) = amount * cm-2 * yr-1
-    fluxes[is.na(fluxes)] <- 0
+  ages <- array(0, dim=c(nrow(set$output), length(set$elbows)))   
+
+  for(i in 1:nrow(flux)){
+    #ages_flux.d[i,] <- Bacon.Age.d(flux[i,1], BCAD=FALSE)
+    acc.d <-accrate.depth(flux[i,1], cmyr = cmyr, ages=ages, silent =TRUE, BCAD=FALSE) #find the accumulation rate for each depth with fluxes
+    fluxes.d[i,] <- flux[i,2] / acc.d # (amount / cm^3) / (yr/cm) = amount * cm-2 * yr-1
   }
+  
+  #interpolate to age.res
+  for(i in 1:ncol(ages))
+    ages[,i] <- Bacon.Age.d(set$elbows[i], BCAD=FALSE)
+  
+  for(i in 1:nrow(set$output)){
+    ages.d <- approx(ages[i,], set$elbows, age.seq, rule=1)$y # find the depth belonging to each age.seq, NA if none
+    flux.d <- approx(flux[,1], fluxes.d[,i], ages.d, rule=1)$y # interpolate flux (in depth) to depths belonging to each age.seq
+    fluxes[i,] <- flux.d 
+    }
   message("\n")
+  
   if(length(flux.lim) == 0)
     flux.lim <- c(0, quantile(fluxes[!is.na(fluxes)], upper))
   max.dens <- 0
