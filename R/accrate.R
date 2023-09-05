@@ -460,7 +460,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
 
   for(i in 1:nrow(flux)){
     #ages_flux.d[i,] <- Bacon.Age.d(flux[i,1], BCAD=FALSE)
-    acc.d <-accrate.depth(flux[i,1], cmyr = cmyr, ages=ages, silent =TRUE, BCAD=FALSE) #find the accumulation rate for each depth with fluxes
+    acc.d <-accrate.depth(flux[i,1], cmyr = FALSE) #find the accumulation rate for each depth with fluxes
     fluxes.d[i,] <- flux[i,2] / acc.d # (amount / cm^3) / (yr/cm) = amount * cm-2 * yr-1
   }
   
