@@ -183,6 +183,8 @@ accrate.depth.ghost <- function(set=get('info'), d=set$elbows, d.lim=c(), acc.li
   if(rev.acc)
     acc.lim <- rev(acc.lim)
 
+  #Plot figure 
+  pdf(file=paste0(info$prefix, "_acc_depth.pdf"))
   if(rotate.axes) {
     plot(0, type="n", xlab=acc.lab, ylab=d.lab, ylim=d.lim, xlim=acc.lim, bty="n", xaxs=xaxs, yaxs=yaxs)
     for(i in 2:length(d)) {
@@ -218,7 +220,7 @@ accrate.depth.ghost <- function(set=get('info'), d=set$elbows, d.lim=c(), acc.li
     if(remove.laststep)
       abline(v=max(set$elbows), col="white", lwd=1.5)
     }
-
+  dev.off()
   box(bty=bty)  
   invisible(stored)
 }
@@ -337,6 +339,8 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
 
   cols <- rgb(rgb.scale[1], rgb.scale[2], rgb.scale[3], seq(0, 1, length=rgb.res))
 
+  #plot figure 
+  pdf(file=paste0(info$prefix, "_acc_age.pdf"))
   if(rotate.axes) {
     yaxt <- ifelse(kcal || BCAD, "n", "s")
     plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=acc.lim, xlab=acc.lab, yaxs=xaxs, xaxs=yaxs, yaxt=yaxt, bty="n")
@@ -370,7 +374,7 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
       if(plot.median)
         lines(age.seq, acc.median, col=median.col, lty=median.lty)
     }
-
+  dev.off()
   box(bty=bty)
   invisible(stored)
 }
@@ -486,7 +490,8 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
     if(length(tmp) > 0)
       max.dens <- max(max.dens, density(tmp, from=0, to=max(flux.lim))$y)
   }
-
+  
+  pdf(file=paste0(info$prefix, "_flux_age.pdf")) # initialize saving plot
   if(length(age.lim) == 0)
     age.lim <- range(age.seq)
   if(length(age.lab) == 0)
@@ -500,7 +505,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
         axis(1, pretty(age.lim), labels=1950-pretty(age.lim))
   } else
       ifelse(rotate.axes, axis(2), axis(1))
-
+  
   min.rng <- numeric(length(age.seq)); max.rng <- numeric(length(age.seq)); mean.rng <- numeric(length(age.seq)); median.rng <- numeric(length(age.seq))
   for(i in 2:length(age.seq)) {
     tmp <- fluxes[!is.na(fluxes[,i]),i] # all fluxes that fall at the required age.seq age
@@ -539,7 +544,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
     if(rotate.axes)
       lines(median.rng, age.seq, col=median.col, lty=median.lty) else
        lines(age.seq, median.rng, col=median.col, lty=median.lty)
-  
+  dev.off()
   #store values for output
   message("\n")
   if(BCAD) {
