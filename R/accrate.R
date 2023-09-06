@@ -184,7 +184,7 @@ accrate.depth.ghost <- function(set=get('info'), d=set$elbows, d.lim=c(), acc.li
     acc.lim <- rev(acc.lim)
 
   #Plot figure 
-  pdf(file=paste0(info$prefix, "_acc_depth.pdf"))
+  dev.copy2pdf(file=paste0(info$prefix, "_acc_depth.pdf"))
   if(rotate.axes) {
     plot(0, type="n", xlab=acc.lab, ylab=d.lab, ylim=d.lim, xlim=acc.lim, bty="n", xaxs=xaxs, yaxs=yaxs)
     for(i in 2:length(d)) {
@@ -340,7 +340,7 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
   cols <- rgb(rgb.scale[1], rgb.scale[2], rgb.scale[3], seq(0, 1, length=rgb.res))
 
   #plot figure 
-  pdf(file=paste0(info$prefix, "_acc_age.pdf"))
+  dev.copy2pdf(file=paste0(info$prefix, "_acc_age.pdf"))
   if(rotate.axes) {
     yaxt <- ifelse(kcal || BCAD, "n", "s")
     plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=acc.lim, xlab=acc.lab, yaxs=xaxs, xaxs=yaxs, yaxt=yaxt, bty="n")
@@ -491,7 +491,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
       max.dens <- max(max.dens, density(tmp, from=0, to=max(flux.lim))$y)
   }
   
-  pdf(file=paste0(info$prefix, "_flux_age.pdf")) # initialize saving plot
+  dev.copy2pdf(file=paste0(info$prefix, "_flux_age.pdf")) # initialize saving plot
   if(length(age.lim) == 0)
     age.lim <- range(age.seq)
   if(length(age.lab) == 0)
