@@ -219,8 +219,8 @@ accrate.depth.ghost <- function(set=get('info'), d=set$elbows, d.lim=c(), acc.li
       lines(d, median.rng, type="s", col=median.col, lty=median.lty)
     if(remove.laststep)
       abline(v=max(set$elbows), col="white", lwd=1.5)
-    }
-  dev.off()
+  }
+  dev.copy2pdf(file=paste0(info$prefix, "_acc_depth.pdf"))
   box(bty=bty)  
   invisible(stored)
 }
@@ -339,8 +339,6 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
 
   cols <- rgb(rgb.scale[1], rgb.scale[2], rgb.scale[3], seq(0, 1, length=rgb.res))
 
-  #plot figure 
-  dev.copy2pdf(file=paste0(info$prefix, "_acc_age.pdf"))
   if(rotate.axes) {
     yaxt <- ifelse(kcal || BCAD, "n", "s")
     plot(0, type="n", ylim=age.lim, ylab=age.lab, xlim=acc.lim, xlab=acc.lab, yaxs=xaxs, xaxs=yaxs, yaxt=yaxt, bty="n")
@@ -373,9 +371,10 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
         lines(age.seq, acc.mean, col=mean.col, lty=mean.lty)
       if(plot.median)
         lines(age.seq, acc.median, col=median.col, lty=median.lty)
-    }
-  dev.off()
+  }
+
   box(bty=bty)
+  dev.copy2pdf(file=paste0(info$prefix, "_acc_age.pdf"))
   invisible(stored)
 }
 
@@ -491,7 +490,6 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
       max.dens <- max(max.dens, density(tmp, from=0, to=max(flux.lim))$y)
   }
   
-  dev.copy2pdf(file=paste0(info$prefix, "_flux_age.pdf")) # initialize saving plot
   if(length(age.lim) == 0)
     age.lim <- range(age.seq)
   if(length(age.lab) == 0)
@@ -544,7 +542,8 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
     if(rotate.axes)
       lines(median.rng, age.seq, col=median.col, lty=median.lty) else
        lines(age.seq, median.rng, col=median.col, lty=median.lty)
-  dev.off()
+  
+  dev.copy2pdf(file=paste0(info$prefix, "_flux_age.pdf")) # initialize saving plot
   #store values for output
   message("\n")
   if(BCAD) {
