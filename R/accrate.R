@@ -159,7 +159,7 @@ accrate.depth.ghost <- function(set=get('info'), d=set$elbows, d.lim=c(), acc.li
    }
   stored <- cbind(d, min.rng, max.rng, median.rng, mean.rng)
   colnames(stored) <- c("depth", "min.rng", "max.rng", "median", "mean")
-  write.csv(x = stored, file =paste0(set$coredir, set$core, "/", set$core, "_acc_depth.csv"))
+  write.csv(x = stored, file =paste0(set$coredir, set$core, "/", set$core, "_", set$K, "_acc_depth.csv"))
   
   for(i in 1:length(d)) {
     acc[[i]]$y <- acc[[i]]$y/(dark*max.dens)
@@ -316,7 +316,7 @@ accrate.age.ghost <- function(set=get('info'), age.lim=c(), age.lab=c(), kcal=FA
   message("\n")
   stored <- cbind(age.seq, acc.rng[,1], acc.rng[,2], acc.median, acc.mean)
   colnames(stored) <- c("ages", "min.rng", "max.rng", "median", "mean")
-  write.csv(x = stored, file =paste0(set$coredir, set$core, "/", set$core, "_acc_age.csv"))
+  write.csv(x = stored, file =paste0(set$coredir, set$core, "/", set$core, "_", set$K,"_acc_age.csv"))
   
   z <- z/(dark*max(z)) # normalise, set dark to black
   z[z>1] <- 1 # avoid values > 1
@@ -547,7 +547,7 @@ flux.age.ghost <- function(proxy=1, age.lim=c(), yr.lim=age.lim, age.res=200, yr
   }
   stored <- cbind(age.seq, min.rng, max.rng, median.rng, mean.rng)
   colnames(stored) <- c("ages", "min.rng", "max.rng", "median", "mean")
-  write.csv(x = stored, file =paste0(set$coredir, set$core, "/", set$core, "_flux_age.csv"))
+  write.csv(x = stored, file =paste0(set$coredir, set$core, "/", set$core, "_", set$K, "_flux_age.csv"))
   
   invisible(stored)
 }
